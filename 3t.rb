@@ -7,7 +7,7 @@ class Player
   @@players = 0
   def initialize(n)
     @uname = n
-    @type = @@players ? 'X' : 'O'
+    @type = @@players.zero? ? 'X' : 'O'
     @@players += 1
   end
 end
@@ -16,13 +16,13 @@ class Board
   attr_reader :rows
 
   def initialize
-    @rows = [["1 ", "2", "3"], ["4 ", "5", "6"], ["7 ", "8", "9"]]
+    @rows = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
     show
   end
 
   def play(num)
     if Board.is_integer?(num)
-      case num
+      case num.to_i
       when (1..3)
         if @rows[0].include?(num)
           process(num)
@@ -52,10 +52,10 @@ class Board
 
   def show
     (rows.length - 1).times do |i| 
-      puts "\t #{rows[i].join(' | ')}"
+      puts "\t\s #{rows[i].join(' | ')}"
       puts "\t ---+---+---"
     end
-    puts "\t #{rows[2].join(' | ')}"
+    puts "\t\s #{rows[2].join(' | ')}"
     puts "\n"
   end
 
@@ -64,12 +64,11 @@ class Board
   end
 
   def process(num)
-    Player.turn.zero? ? @rows[rows.index(num)] = one.type : @rows[rows.index(num)] = two.type
-    Player.turn.zero? ? Player.turn += 1 : Player.turn = 0
+    # TD
   end
 
   def available()
-    puts "\nPlease input a number (0-9) That's still available on the board\n\n"
+    puts "\n Choose a number that's still available!\n\n"
   end
 end
 
