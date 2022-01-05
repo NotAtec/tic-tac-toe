@@ -17,6 +17,7 @@ class Board
 
   def initialize
     @rows = [["1 ", "2", "3"], ["4 ", "5", "6"], ["7 ", "8", "9"]]
+    show
   end
 
   def play(num)
@@ -41,8 +42,9 @@ class Board
           available
         end
       end
+      show
     else
-      puts "Please input a number between 0 & 9"
+      puts "\nPlease input a number between 0 & 9 \n\n"
     end
   end
 
@@ -67,22 +69,28 @@ class Board
   end
 
   def available()
-    puts "Please input a number (0-9) That's still available on the board"
+    puts "\nPlease input a number (0-9) That's still available on the board\n\n"
   end
 end
 
 # Comment out for testing
-puts 'What is the name of Player 1?'
-name = gets.chomp
-one = Player.new(name)
-puts "\n"
-puts 'What is the name of Player 2?'
-name = gets.chomp
-two = Player.new(name)
-puts "\n"
+#puts 'What is the name of Player 1?'
+#name = gets.chomp
+#one = Player.new(name)
+#puts "\n"
+#puts 'What is the name of Player 2?'
+#name = gets.chomp
+#two = Player.new(name)
+#puts "\n"
+
+one = Player.new("a")
+two = Player.new("b")
 
 board = Board.new
+won = false
 
-
-num = gets.chomp
-board.play(num)
+until won
+  puts "Please input a number (0-9), that's still on the board"
+  num = gets.chomp
+  board.play(num)
+end
