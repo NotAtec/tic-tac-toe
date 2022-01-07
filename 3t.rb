@@ -15,13 +15,12 @@ class Board
     puts "\t\s #{rows[2].join(' | ')}"
     puts "\n"
   end
-
 end
 
 class PlayLoop
   def self.valid(num)
     if integer?(num)
-      if num.to_i > 0 && num.to_i < 10
+      if num.to_i.positive? && num.to_i < 10
         case num.to_i
         when (1..3) then row_check(num, 0)
         when (4..6) then row_check(num, 1)
@@ -54,14 +53,14 @@ end
 
 class Player
   attr_reader :name, :char
-  
+
   @@played = false
   def initialize(name, char)
     @name = name
     @char = char
   end
 
-  def get_input
+  def input
     puts "#{@name}, Please input a number (1-9), that's still on the board."
     gets.chomp
   end
@@ -82,15 +81,18 @@ end
 
 def play(player)
   Board.show
-  num = player.get_input
+  num = player.input
   check = PlayLoop.valid(num)
   case check
   when false then puts "#{player.name}, Please input a number (1-9), that's still available!"
-  when "NAN" then puts "#{player.name}, Please input a number between 1 & 9!"
-  when "ERRNUM" then puts "#{player.name}, Please input a number between 1 & 9, and nothing more or less."
+  when 'NAN' then puts "#{player.name}, Please input a number between 1 & 9!"
+  when 'ERRNUM' then puts "#{player.name}, Please input a number between 1 & 9, and nothing more or less."
   else player.update_board(num, check) end
 end
 
+def check_winners(one, two)
+  
+end
 # Testing only, get player names before prod
 one = Player.new("a", "X")
 two = Player.new("b", "O")
@@ -103,6 +105,8 @@ until won
   turn.zero? ? play(one) : play(two)
   if Player.played
     turn.zero? ? turn += 1 : turn = 0
+    won = check_winners(one, two)
+    binding.pry
   end
   Player.played = false
 end
