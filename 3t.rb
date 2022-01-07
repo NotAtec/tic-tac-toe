@@ -35,12 +35,12 @@ class PlayLoop
 
     def row_check(num, row)
       if Board.rows[row].include?(num)
-        true
+        row
       else
         false
       end
     end
-  
+
     def integer?(num)
       num.to_i.to_s == num
     end
@@ -65,6 +65,10 @@ def play(player)
   Board.show
   num = player.get_input
   check = PlayLoop.valid(num)
+  case check
+  when false then puts "#{player.name}, Please input a number (0-9), that's still available!"
+  when "NAN" then puts "#{player.name}, Please input a number between 0 & 9!"
+  else end
 end
 
 # Testing only, get player names before prod
@@ -76,5 +80,5 @@ won = false
 turn = 0
 
 until won
-  turn == 0 ? play(one) : play(two)
+  turn.zero? ? play(one) : play(two)
 end
