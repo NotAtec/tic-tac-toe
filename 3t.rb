@@ -8,7 +8,7 @@ class Board
   end
 
   def self.show
-    (self.rows.length - 1).times do |row|
+    (@@rows.length - 1).times do |i|
       puts "\t\s #{rows[i].join(' | ')}"
       puts "\t ---+---+---"
     end
@@ -60,6 +60,7 @@ class Player
 end
 
 def play(player)
+  Board.show
   num = player.get_input
   check = PlayLoop.valid(num)
 end
