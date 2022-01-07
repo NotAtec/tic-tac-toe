@@ -94,14 +94,14 @@ def check_winners
   row0 = Board.rows[0]
   row1 = Board.rows[1]
   row2 = Board.rows[2]
-
-  if row0.uniq.length == 1
-    true
-  elsif row1.uniq.length == 1
-    true
-  elsif row2.uniq.length == 1
-    true
-  elsif [row0[0], row1[0], row2[0]].uniq.length == 1
+  rows = Board.rows
+  
+  rows.each do |row|
+    if row.uniq.length == 1
+      return true
+    end
+  end
+  if [row0[0], row1[0], row2[0]].uniq.length == 1
     true
   elsif [row0[1], row1[1], row2[1]].uniq.length == 1
     true
