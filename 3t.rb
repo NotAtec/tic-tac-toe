@@ -52,8 +52,13 @@ end
 
 def play(player)
   num = player.get_input
-  PlayLoop.valid(num)
+  check = PlayLoop.valid(num)
 end
+
+# Testing only, get player names before prod
+one = Player.new("a", "X")
+two = Player.new("b", "O")
+# /Testing
 
 won = false
 turn = 0
