@@ -6,6 +6,15 @@ class Board
   def self.rows
     @@rows
   end
+
+  def self.show
+    (self.rows.length - 1).times do |row|
+      puts "\t\s #{rows[i].join(' | ')}"
+      puts "\t ---+---+---"
+    end
+    puts "\t\s #{rows[2].join(' | ')}"
+    puts "\n"
+  end
 end
 
 class PlayLoop
