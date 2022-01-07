@@ -1,5 +1,6 @@
-require 'pry-byebug'
+# frozen_string_literal: true
 
+# Class including all methods related to the board
 class Board
   @@rows = [
     %w[1 2 3],
@@ -21,7 +22,7 @@ class Board
   end
 
   def self.reset
-    @@rows =  [
+    @@rows = [
       %w[1 2 3],
       %w[4 5 6],
       %w[7 8 9]
@@ -41,21 +42,20 @@ class Board
   end
 end
 
-class PlayLoop
+# Class containing method to check for correct input
+class InputCheck
   def self.valid(num)
     if integer?(num)
       if num.to_i.positive? && num.to_i < 10
         case num.to_i
-        when (1..3) then row_check(num, 0)
-        when (4..6) then row_check(num, 1)
-        when (7..9) then row_check(num, 2)
+        when (1..3) then return row_check(num, 0)
+        when (4..6) then return row_check(num, 1)
+        when (7..9) then return row_check(num, 2)
         end
-      else
-        'ERRNUM'
       end
-    else
-      'NAN'
+      return 'ERRNUM'
     end
+    'NAN'
   end
 
   class << self
@@ -75,6 +75,7 @@ class PlayLoop
   end
 end
 
+# Contains method for playing an input
 class Player
   attr_reader :name, :char
 
@@ -87,7 +88,7 @@ class Player
   def play
     Board.show
     num = input
-    check = PlayLoop.valid(num)
+    check = InputCheck.valid(num)
     case check
     when false then puts "#{name}, Please input a number (1-9), that's still available!"
     when 'NAN' then puts "#{name}, Please input a number between 1 & 9!"
@@ -104,6 +105,7 @@ class Player
   end
 
   private
+
   def input
     puts "#{@name}, Please input a number (1-9), that's still on the board."
     gets.chomp
@@ -116,6 +118,11 @@ class Player
 end
 
 def playgame(one, two)
+  turn = main_loop(one, two)
+  win_text(turn, one, two)
+end
+
+def main_loop(one, two)
   won = false
   turn = 0
   until won
@@ -126,6 +133,10 @@ def playgame(one, two)
     end
     Player.played = false
   end
+  turn
+end
+
+def win_text(turn, one, two)
   if turn.zero?
     puts "Congrats #{two.name}, you won this game!"
   else
@@ -133,16 +144,16 @@ def playgame(one, two)
   end
 end
 
-def getPlayer
-  puts "Player, what is your name?"
+def new_player
+  puts 'Player, what is your name?'
   name = gets.chomp
   puts "Hi #{name}, which character do you want to use as your marker?"
   mark = gets.chomp
   Player.new(name, mark)
 end
 
-one = getPlayer
-two = getPlayer
+one = new_player
+two = new_player
 
 playgame(one, two)
 Board.reset
