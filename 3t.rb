@@ -84,11 +84,6 @@ class Player
     @char = char
   end
 
-  def input
-    puts "#{@name}, Please input a number (1-9), that's still on the board."
-    gets.chomp
-  end
-
   def play
     Board.show
     num = input
@@ -109,6 +104,11 @@ class Player
   end
 
   private
+  def input
+    puts "#{@name}, Please input a number (1-9), that's still on the board."
+    gets.chomp
+  end
+
   def update_board(num, row)
     Board.rows[row][Board.rows[row].index(num)] = @char
     @@played = true
