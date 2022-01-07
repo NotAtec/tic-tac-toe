@@ -90,8 +90,28 @@ def play(player)
   else player.update_board(num, check) end
 end
 
-def check_winners(one, two)
-  
+def check_winners
+  row0 = Board.rows[0]
+  row1 = Board.rows[1]
+  row2 = Board.rows[2]
+
+  if row0.uniq.length == 1
+    true
+  elsif row1.uniq.length == 1
+    true
+  elsif row2.uniq.length == 1
+    true
+  elsif [row0[0], row1[0], row2[0]].uniq.length == 1
+    true
+  elsif [row0[1], row1[1], row2[1]].uniq.length == 1
+    true
+  elsif [row0[2], row1[2], row2[2]].uniq.length == 1
+    true
+  elsif [row0[0], row1[1], row2[2]].uniq.length == 1
+    true
+  elsif [row0[2], row1[1], row2[0]].uniq.length == 1
+    true
+  end
 end
 # Testing only, get player names before prod
 one = Player.new("a", "X")
@@ -105,8 +125,7 @@ until won
   turn.zero? ? play(one) : play(two)
   if Player.played
     turn.zero? ? turn += 1 : turn = 0
-    won = check_winners(one, two)
-    binding.pry
+    won = check_winners
   end
   Player.played = false
 end
