@@ -1,7 +1,11 @@
 require 'pry-byebug'
 
 class Board
-  @@rows = [%w[1 2 3], %w[4 5 6], %w[7 8 9]]
+  @@rows = [
+    %w[1 2 3],
+    %w[4 5 6],
+    %w[7 8 9]
+  ]
 
   def self.rows
     @@rows
@@ -91,26 +95,14 @@ def play(player)
 end
 
 def check_winners
-  row0 = Board.rows[0]
-  row1 = Board.rows[1]
-  row2 = Board.rows[2]
+  cells = Board.rows.flatten
+  valid_wins = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],
+    [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
+  ]
 
-  if row0.uniq.length == 1
-    true
-  elsif row1.uniq.length == 1
-    true
-  elsif row2.uniq.length == 1
-    true
-  elsif [row0[0], row1[0], row2[0]].uniq.length == 1
-    true
-  elsif [row0[1], row1[1], row2[1]].uniq.length == 1
-    true
-  elsif [row0[2], row1[2], row2[2]].uniq.length == 1
-    true
-  elsif [row0[0], row1[1], row2[2]].uniq.length == 1
-    true
-  elsif [row0[2], row1[1], row2[0]].uniq.length == 1
-    true
+  valid_wins.any? do |valid|
+    [cells[valid[0]], cells[valid[1]], cells[valid[2]]].uniq.length == 1
   end
 end
 
@@ -130,3 +122,12 @@ until won
   end
   Player.played = false
 end
+if turn.zero?
+  puts "Congrats #{two.name}, you won this game!"
+else
+  puts "Congrats #{one.name}, you won this game!"
+end
+
+puts 'Do you want to play another round? (y/n)'
+replay = gets.chomp
+playgame if replay == 'y' || replay == 'n'
