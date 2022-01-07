@@ -23,20 +23,16 @@ class Player
   def get_input
     puts "#{@name}, Please input a number (0-9), that's still on the board."
     gets.chomp
+  end
 end
 
-def turn(player)
+def input(player)
   num = player.get_input
-
 end
 
 won = false
 turn = 0
 
 until won
-  if turn == 0
-    turn(one)
-
-  else
-
+  turn == 0 ? play(one) : play(two)
 end
