@@ -9,7 +9,31 @@ class Board
 end
 
 class PlayLoop
+  def self.valid(num)
+    if integer?(num)
+      case num.to_i
+      when (1..3) then row_check(num, 0)
+      when (4..6) then row_check(num, 1)
+      when (7..9) then row_check(num, 2)
+      end
+    else
+      'NAN'
+    end
+  end
 
+  private_class_method :row_check, :integer?
+
+  def self.row_check(num, row)
+    if Board.rows[row].include?(num)
+      true
+    else
+      false
+    end
+  end
+
+  def self.integer?(num)
+    num.to_i.to_s == num
+  end
 end
 
 class Player
@@ -26,8 +50,9 @@ class Player
   end
 end
 
-def input(player)
+def play(player)
   num = player.get_input
+  PlayLoop.valid(num)
 end
 
 won = false
