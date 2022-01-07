@@ -19,6 +19,26 @@ class Board
     puts "\t\s #{rows[2].join(' | ')}"
     puts "\n"
   end
+
+  def self.reset
+    @@rows =  [
+      %w[1 2 3],
+      %w[4 5 6],
+      %w[7 8 9]
+    ]
+  end
+
+  def self.check_winners
+    cells = rows.flatten
+    valid_wins = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],
+      [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
+    ]
+
+    valid_wins.any? do |valid|
+      [cells[valid[0]], cells[valid[1]], cells[valid[2]]].uniq.length == 1
+    end
+  end
 end
 
 class PlayLoop
@@ -69,9 +89,15 @@ class Player
     gets.chomp
   end
 
-  def update_board(num, row)
-    Board.rows[row][Board.rows[row].index(num)] = @char
-    @@played = true
+  def play
+    Board.show
+    num = input
+    check = PlayLoop.valid(num)
+    case check
+    when false then puts "#{name}, Please input a number (1-9), that's still available!"
+    when 'NAN' then puts "#{name}, Please input a number between 1 & 9!"
+    when 'ERRNUM' then puts "#{name}, Please input a number between 1 & 9, and nothing more or less."
+    else update_board(num, check) end
   end
 
   def self.played
@@ -81,28 +107,29 @@ class Player
   def self.played=(new)
     @@played = new
   end
+
+  private
+  def update_board(num, row)
+    Board.rows[row][Board.rows[row].index(num)] = @char
+    @@played = true
+  end
 end
 
-def play(player)
-  Board.show
-  num = player.input
-  check = PlayLoop.valid(num)
-  case check
-  when false then puts "#{player.name}, Please input a number (1-9), that's still available!"
-  when 'NAN' then puts "#{player.name}, Please input a number between 1 & 9!"
-  when 'ERRNUM' then puts "#{player.name}, Please input a number between 1 & 9, and nothing more or less."
-  else player.update_board(num, check) end
-end
-
-def check_winners
-  cells = Board.rows.flatten
-  valid_wins = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],
-    [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
-  ]
-
-  valid_wins.any? do |valid|
-    [cells[valid[0]], cells[valid[1]], cells[valid[2]]].uniq.length == 1
+def playgame(one, two)
+  won = false
+  turn = 0
+  until won
+    turn.zero? ? one.play : two.play
+    if Player.played
+      turn.zero? ? turn += 1 : turn = 0
+      won = Board.check_winners
+    end
+    Player.played = false
+  end
+  if turn.zero?
+    puts "Congrats #{two.name}, you won this game!"
+  else
+    puts "Congrats #{one.name}, you won this game!"
   end
 end
 
@@ -111,23 +138,7 @@ one = Player.new("a", "X")
 two = Player.new("b", "O")
 # /Testing
 
-won = false
-turn = 0
-
-until won
-  turn.zero? ? play(one) : play(two)
-  if Player.played
-    turn.zero? ? turn += 1 : turn = 0
-    won = check_winners
-  end
-  Player.played = false
-end
-if turn.zero?
-  puts "Congrats #{two.name}, you won this game!"
-else
-  puts "Congrats #{one.name}, you won this game!"
-end
-
+playgame(one, two)
+Board.reset
 puts 'Do you want to play another round? (y/n)'
-replay = gets.chomp
-playgame if replay == 'y' || replay == 'n'
+playgame(one, two) if gets.chomp == 'y'
