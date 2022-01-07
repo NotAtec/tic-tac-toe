@@ -21,10 +21,14 @@ end
 class PlayLoop
   def self.valid(num)
     if integer?(num)
-      case num.to_i
-      when (1..3) then row_check(num, 0)
-      when (4..6) then row_check(num, 1)
-      when (7..9) then row_check(num, 2)
+      if num.to_i > 0 && num.to_i < 10
+        case num.to_i
+        when (1..3) then row_check(num, 0)
+        when (4..6) then row_check(num, 1)
+        when (7..9) then row_check(num, 2)
+        end
+      else
+        'ERRNUM'
       end
     else
       'NAN'
@@ -83,6 +87,7 @@ def play(player)
   case check
   when false then puts "#{player.name}, Please input a number (1-9), that's still available!"
   when "NAN" then puts "#{player.name}, Please input a number between 1 & 9!"
+  when "ERRNUM" then puts "#{player.name}, Please input a number between 1 & 9, and nothing more or less."
   else player.update_board(num, check) end
 end
 
