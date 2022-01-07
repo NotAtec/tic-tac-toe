@@ -13,38 +13,22 @@ class Player
 end
 
 class Board
-  attr_reader :rows
+  attr_accessor :rows
 
   def initialize
     @rows = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
     show
   end
 
-  def play(num)
-    if Board.is_integer?(num)
+  def valid?(num)
+    if Board.integer?(num)
       case num.to_i
-      when (1..3)
-        if @rows[0].include?(num)
-          process(num)
-        else
-          available
-        end
-      when (4..6)
-        if @rows[1].include?(num)
-          process(num)
-        else
-          available
-        end
-      when (7..9)
-        if @rows[2].include?(num)
-          process(num)
-        else
-          available
-        end
+      when (1..3) then row_check(num, 0)
+      when (4..6) then row_check(num, 1)
+      when (7..9) then row_check(num, 2)
       end
-      show
     else
-      puts "\nPlease input a number between 0 & 9 \n\n"
+      'NAN'
     end
   end
 
@@ -59,16 +43,16 @@ class Board
     puts "\n"
   end
 
-  def self.is_integer?(num)
+  def row_check(num, row)
+    if @rows[row].include?(num)
+      true
+    else
+      false
+    end
+  end
+
+  def self.integer?(num)
     num.to_i.to_s == num
-  end
-
-  def process(num)
-    # TD
-  end
-
-  def available()
-    puts "\n Choose a number that's still available!\n\n"
   end
 end
 
@@ -91,5 +75,5 @@ won = false
 until won
   puts "Please input a number (0-9), that's still on the board"
   num = gets.chomp
-  board.play(num)
+  check = board.valid?(num)
 end
