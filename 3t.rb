@@ -144,16 +144,21 @@ def win_text(turn, one, two)
   end
 end
 
-def new_player
+def new_player(other = 'none')
   puts 'Player, what is your name?'
   name = gets.chomp
-  puts "Hi #{name}, which character do you want to use as your marker?"
+  puts "Hi #{name}, which character do you want to use as your marker?" if other == 'none'
+  puts "Hi #{name}, which character do you want to use as your marker? (It can't be #{other})" unless other == 'none'
   mark = gets.chomp
+  while mark == other
+    puts "It can't be #{mark}, pick something else!"
+    mark = gets.chomp
+  end
   Player.new(name, mark)
 end
 
 one = new_player
-two = new_player
+two = new_player(one.char)
 
 playgame(one, two)
 Board.reset
