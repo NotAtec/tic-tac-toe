@@ -15,6 +15,7 @@ class Board
     puts "\t\s #{rows[2].join(' | ')}"
     puts "\n"
   end
+
 end
 
 class PlayLoop
@@ -49,15 +50,29 @@ end
 
 class Player
   attr_reader :name, :char
-
+  
+  @@played = false
   def initialize(name, char)
     @name = name
     @char = char
   end
 
   def get_input
-    puts "#{@name}, Please input a number (0-9), that's still on the board."
+    puts "#{@name}, Please input a number (1-9), that's still on the board."
     gets.chomp
+  end
+
+  def update_board(num, row)
+    Board.rows[row][Board.rows[row].index(num)] = @char
+    @@played = true
+  end
+
+  def self.played
+    @@played
+  end
+
+  def self.played=(new)
+    @@played = new
   end
 end
 
@@ -66,9 +81,9 @@ def play(player)
   num = player.get_input
   check = PlayLoop.valid(num)
   case check
-  when false then puts "#{player.name}, Please input a number (0-9), that's still available!"
-  when "NAN" then puts "#{player.name}, Please input a number between 0 & 9!"
-  else end
+  when false then puts "#{player.name}, Please input a number (1-9), that's still available!"
+  when "NAN" then puts "#{player.name}, Please input a number between 1 & 9!"
+  else player.update_board(num, check) end
 end
 
 # Testing only, get player names before prod
@@ -81,4 +96,8 @@ turn = 0
 
 until won
   turn.zero? ? play(one) : play(two)
+  if Player.played
+    turn.zero? ? turn += 1 : turn = 0
+  end
+  Player.played = false
 end
