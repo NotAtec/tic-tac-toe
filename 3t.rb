@@ -117,50 +117,58 @@ class Player
   end
 end
 
-def playgame(one, two)
-  turn = main_loop(one, two)
-  win_text(turn, one, two)
-end
-
-def main_loop(one, two)
-  won = false
-  turn = 0
-  until won
-    turn.zero? ? one.play : two.play
-    if Player.played
-      turn.zero? ? turn += 1 : turn = 0
-      won = Board.check_winners
-    end
-    Player.played = false
+# Contains all methods regarding the game
+class Game
+  def self.play_game(one, two)
+    turn = main_loop(one, two)
+    win_text(turn, one, two)
   end
-  turn
-end
 
-def win_text(turn, one, two)
-  if turn.zero?
-    puts "Congrats #{two.name}, you won this game!"
-  else
-    puts "Congrats #{one.name}, you won this game!"
-  end
-end
-
-def new_player(other = 'none')
-  puts 'Player, what is your name?'
-  name = gets.chomp
-  puts "Hi #{name}, which character do you want to use as your marker?" if other == 'none'
-  puts "Hi #{name}, which character do you want to use as your marker? (It can't be #{other})" unless other == 'none'
-  mark = gets.chomp
-  while mark == other
-    puts "It can't be #{mark}, pick something else!"
+  def self.new_player(other = 'none')
+    puts 'Player, what is your name?'
+    name = gets.chomp
+    puts "Hi #{name}, which character do you want to use as your marker?" if other == 'none'
+    puts "Hi #{name}, which character do you want to use as your marker? (It can't be #{other})" unless other == 'none'
     mark = gets.chomp
+    while mark == other
+      puts "It can't be #{mark}, pick something else!"
+      mark = gets.chomp
+    end
+    Player.new(name, mark)
   end
-  Player.new(name, mark)
+
+  class << self
+    private
+
+    def main_loop(one, two)
+      won = false
+      turn = 0
+      until won
+        turn.zero? ? one.play : two.play
+        if Player.played
+          turn.zero? ? turn += 1 : turn = 0
+          won = Board.check_winners
+        end
+        Player.played = false
+      end
+      turn
+    end
+
+    def win_text(turn, one, two)
+      Board.show
+      if turn.zero?
+        puts "Congrats #{two.name}, you won this game!"
+      else
+        puts "Congrats #{one.name}, you won this game!"
+      end
+    end
+  end
 end
 
-one = new_player
-two = new_player(one.char)
+one = Game.new_player
+two = Game.new_player(one.char)
 
-playgame(one, two)
+Game.play_game(one, two)
 Board.reset
 puts 'Do you want to play another round? (y/n)'
-playgame(one, two) if gets.chomp == 'y'
+Game.play_game(one, two) if gets.chomp == 'y'
