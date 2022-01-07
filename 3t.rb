@@ -13,11 +13,30 @@ class PlayLoop
 end
 
 class Player
+  attr_reader :name, :char
+
+  def initialize(name, char)
+    @name = name
+    @char = char
+  end
+
+  def get_input
+    puts "#{@name}, Please input a number (0-9), that's still on the board."
+    gets.chomp
+end
+
+def turn(player)
+  num = player.get_input
 
 end
 
 won = false
+turn = 0
 
 until won
+  if turn == 0
+    turn(one)
+
+  else
 
 end
