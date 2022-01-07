@@ -30,18 +30,20 @@ class PlayLoop
     end
   end
 
-  private_class_method :row_check, :integer?
+  class << self
+    private
 
-  def self.row_check(num, row)
-    if Board.rows[row].include?(num)
-      true
-    else
-      false
+    def row_check(num, row)
+      if Board.rows[row].include?(num)
+        true
+      else
+        false
+      end
     end
-  end
-
-  def self.integer?(num)
-    num.to_i.to_s == num
+  
+    def integer?(num)
+      num.to_i.to_s == num
+    end
   end
 end
 
