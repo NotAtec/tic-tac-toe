@@ -133,10 +133,16 @@ def playgame(one, two)
   end
 end
 
-# Testing only, get player names before prod
-one = Player.new("a", "X")
-two = Player.new("b", "O")
-# /Testing
+def getPlayer
+  puts "Player, what is your name?"
+  name = gets.chomp
+  puts "Hi #{name}, which character do you want to use as your marker?"
+  mark = gets.chomp
+  Player.new(name, mark)
+end
+
+one = getPlayer
+two = getPlayer
 
 playgame(one, two)
 Board.reset
