@@ -40,6 +40,10 @@ class Board
       [cells[valid[0]], cells[valid[1]], cells[valid[2]]].uniq.length == 1
     end
   end
+
+  def self.check_tie
+    rows.flatten.all? { |x| x =~ /\D/}
+  end
 end
 
 # Class containing method to check for correct input
@@ -148,6 +152,10 @@ class Game
         if Player.played
           turn.zero? ? turn += 1 : turn = 0
           won = Board.check_winners
+          if Board.check_tie
+            won = Board.check_tie
+            turn = 2
+          end
         end
         Player.played = false
       end
@@ -158,8 +166,10 @@ class Game
       Board.show
       if turn.zero?
         puts "Congrats #{two.name}, you won this game!"
-      else
+      elsif turn == 1
         puts "Congrats #{one.name}, you won this game!"
+      else
+        puts "It's a Tie!"
       end
     end
   end
